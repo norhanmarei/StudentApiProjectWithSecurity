@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using StudentApi.DataSimulation;
@@ -9,7 +10,7 @@ using System.Collections.Generic;
 namespace StudentApi.Controllers
 
 {
-
+    [Authorize]
     [ApiController]
 
     [Route("api/students")]
@@ -20,6 +21,7 @@ namespace StudentApi.Controllers
         [HttpGet("All", Name = "GetAllStudents")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult<IEnumerable<Student>> GetAllStudents()
 
         {
@@ -34,6 +36,7 @@ namespace StudentApi.Controllers
         [HttpGet("Passed", Name = "GetPassedStudents")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult<IEnumerable<Student>> GetPassedStudents()
 
         {
@@ -50,6 +53,7 @@ namespace StudentApi.Controllers
         [HttpGet("Average", Name = "GetAverageGrade")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult<double> GetAverageGrade()
 
         {
@@ -69,6 +73,7 @@ namespace StudentApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult<Student> GetStudentById(int Id)
 
         {
@@ -87,6 +92,7 @@ namespace StudentApi.Controllers
         [HttpPost(Name = "AddNewStudent")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult<Student> AddNewStudent(Student student)
 
         {
@@ -108,6 +114,7 @@ namespace StudentApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult DeleteStudent(int Id)
 
         {
@@ -127,6 +134,7 @@ namespace StudentApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult<Student> UpdateStudent(int Id, Student updatedStudent)
 
 
