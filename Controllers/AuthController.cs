@@ -37,9 +37,14 @@ namespace StudentApi.Controllers
                 new Claim(ClaimTypes.Email, student.Email),
                 new Claim(ClaimTypes.Role, student.Role)
             };
-            // the key shouldn't be hardcoded in the codebase---> handle that later
-            var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes("THIS_IS_A_VERY_SECRET_KEY_123456"));
+            var keyString = Environment.GetEnvironmentVariable("STUDENTAPI_DEV_JWT_KEY");
+
+            if (string.IsNullOrEmpty(keyString))
+                {
+                  throw new Exception("JWT secret key not found in environment variables.");
+                }   
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyString));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
