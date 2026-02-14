@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +58,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // ===============================
 // Authorization Configuration
 // ===============================
+builder.Services.AddSingleton<IAuthorizationHandler, StudentOwnerOrAdminHandler>();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("StudentOwnerOrAdmin", policy =>
+        policy.Requirements.Add(new StudentOwnerOrAdminRequirement()));
+});
 builder.Services.AddAuthorization();
 
 

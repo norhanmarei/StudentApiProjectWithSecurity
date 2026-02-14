@@ -80,18 +80,23 @@ namespace StudentApi.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public ActionResult<Student> GetStudentById(int Id)
+        public async Task<ActionResult<Student>> GetStudentById(
+        int id,
+        [FromServices] IAuthorizationService authorizationService)
 
         {
+            if (id < 1) return BadRequest($"Bad Request: Not Accepted Id [{id}]");
+            var student = StudentDataSimulation.StudentsList.Find(s => s.Id == id);
+            if (student == null) return NotFound($"Not Found: Student With Id [{id}] Not Found.");
 
-            if (Id < 1) return BadRequest($"Bad Request: Not Accepted Id [{Id}]");
-            var student = StudentDataSimulation.StudentsList.Find(s => s.Id == Id);
-            if (student == null) return NotFound($"Not Found: Student With Id [{Id}] Not Found.");
+            var authResult = await authorizationService.AuthorizeAsync(
+                                   User,
+                                   id,
+                                   "StudentOwnerOrAdmin");
 
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var userRole = User.FindFirstValue(ClaimTypes.Role);
-            bool isAdmin = userRole == "Admin";
-            if (!isAdmin && userId != Id) return Forbid();
+            if (!authResult.Succeeded)
+                return Forbid();
+
             return Ok(student);
 
         }
